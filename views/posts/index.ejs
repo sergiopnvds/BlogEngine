@@ -1,0 +1,105 @@
+
+<% for (var i in posts) { %>
+  <div class="post">
+    <div class="page-header">
+      <h1>
+        <a href='/posts/<%= posts[i].id %>' class='titlelink'> <%= posts[i].title %> </a>
+
+
+
+
+
+
+        <%- posts[i].stars %>
+        <small>por <em> <%= posts[i].author && posts[i].author.name || "Sin autor" %> </em></small>
+        
+      </h1>
+
+     <em> <%= posts[i].updatedAt.toLocaleDateString() %></em>
+
+     
+
+
+   </div>
+      
+     <p>
+        <%= posts[i].body.slice(0,1000) %> ... 
+     </p>
+
+     <footer class="pull-right">
+
+      <% if (session.user && session.user.id == posts[i].authorId) {%>
+
+        <% var form_name = 'fpi' + i; %>
+
+      <% if (session.user) {%>
+              
+              <form method='post' action='/users/<%= session.user.id%>/favourites/<%= posts[i].id%>'>
+               <input type="hidden" name="_method" value="put">
+               <input type='hidden' name='best' value="put">
+
+                <div class="stars">
+                  <label for="rating">
+                  <% var my_best = 0 ; %>
+                  <%for (var j in favourites) { %>
+                    <% if (favourites[j].postId == posts[i].id){ %>
+
+                      <% my_best = favourites[j].best; %>
+                    <% } %>
+                  <% } %>
+
+
+                 
+                 <input type="image" 
+                     src="/images/estrella0.png" onclick="this.form._method.value='delete'; this.form.submit()" />
+
+
+                  <input id="rating-1" name="best" type="image" 
+                     onclick="this.form.best.value=1; this.form.submit()" <% if(my_best >= 1) { %> src="/images/estrella2.png" <% } else{ %> src="/images/estrella1.png" <% } %>/>
+                  
+                  <input id="rating-2" name="best" type="image" 
+                     onclick="this.form.best.value=2; this.form.submit()" <% if(my_best >= 2) { %> src="/images/estrella2.png" <% } else{ %> src="/images/estrella1.png" <% } %>/>
+                  
+                  <input id="rating-3" name="best" type="image" 
+                     onclick="this.form.best.value=3; this.form.submit()" <% if(my_best >= 3) { %> src="/images/estrella2.png" <% } else{ %> src="/images/estrella1.png" <% } %>/>
+                  
+                  <input id="rating-4" name="best" type="image" 
+                     onclick="this.form.best.value=4; this.form.submit()" <% if(my_best >= 4) { %> src="/images/estrella2.png" <% } else{ %> src="/images/estrella1.png" <% } %>/>
+                  
+                  <input id="rating-5" name="best" type="image" 
+                     onclick="this.form.best.value=5; this.form.submit()" <% if(my_best >= 5) { %> src="/images/estrella2.png" <% } else{ %> src="/images/estrella1.png" <% } %>/>
+                  
+                  </label>
+                </div>
+              </form>
+
+              
+            <%  } %>
+
+        
+        <form method='post' action='/posts/<%= posts[i].id %>'
+              name='<%= form_name %>'>
+          <input type='hidden' name='_method' value='delete'>
+          <a class='btn btn-warning btn-mini' href="/posts/<%= posts[i].id %>/edit"> 
+             <i class='icon-edit icon-white'></i> Editar 
+          </a> 
+          <a class='btn btn-danger btn-mini' href="" 
+             onclick="return confirmarSubmit('¿Seguro que desea borrar el post?', '<%= form_name %>')"> 
+             <i class='icon-trash icon-white'></i> Borrar
+          </a>  
+          
+        </form>
+
+      <% } %>
+
+
+
+     <footer>
+  </div>
+<%  }; %>
+<footer>
+  <nav>
+    <a href="/posts/new"> <i class='icon-plus-sign'></i> Crear nuevo Post </a>
+  </nav>
+</footer>
+

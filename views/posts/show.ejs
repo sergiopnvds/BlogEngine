@@ -1,0 +1,95 @@
+
+
+ <div class="post">
+    <div class="page-header">
+      <h1>
+        <%= post.title %>
+        <small>por <em> <%= post.author && post.author.name || "Sin autor" %> </em></small>
+      </h1>
+     <em> <%= post.updatedAt.toLocaleDateString() %></em>
+
+
+
+
+
+ <% if (session.user) {%>
+        
+        <form method='post' action='/users/<%= session.user.id%>/favourites/<%= post.id%>'>
+         <input type="hidden" name="_method" value="put">
+         <input type='hidden' name='best' value="put">
+
+          <div class="stars">
+            <label for="rating">
+            <% var my_best = 0 ; %>
+            <%for (var j in favourites) { %>
+              <% if (favourites[j].postId == post.id){ %>
+
+                <% my_best = favourites[j].best; %>
+              <% } %>
+            <% } %>
+
+
+           
+           <input type="image" 
+               src="/images/estrella0.png" onclick="this.form._method.value='delete'; this.form.submit()" />
+
+
+            <input id="rating-1" name="best" type="image" 
+               onclick="this.form.best.value=1; this.form.submit()" <% if(my_best >= 1) { %> src="/images/estrella2.png" <% } else{ %> src="/images/estrella1.png" <% } %>/>
+            
+            <input id="rating-2" name="best" type="image" 
+               onclick="this.form.best.value=2; this.form.submit()" <% if(my_best >= 2) { %> src="/images/estrella2.png" <% } else{ %> src="/images/estrella1.png" <% } %>/>
+            
+            <input id="rating-3" name="best" type="image" 
+               onclick="this.form.best.value=3; this.form.submit()" <% if(my_best >= 3) { %> src="/images/estrella2.png" <% } else{ %> src="/images/estrella1.png" <% } %>/>
+            
+            <input id="rating-4" name="best" type="image" 
+               onclick="this.form.best.value=4; this.form.submit()" <% if(my_best >= 4) { %> src="/images/estrella2.png" <% } else{ %> src="/images/estrella1.png" <% } %>/>
+            
+            <input id="rating-5" name="best" type="image" 
+               onclick="this.form.best.value=5; this.form.submit()" <% if(my_best >= 5) { %> src="/images/estrella2.png" <% } else{ %> src="/images/estrella1.png" <% } %>/>
+            
+            </label>
+          </div>
+        </form>
+
+        
+      <%  } %>
+
+
+
+
+
+
+
+
+
+
+
+   </div>
+
+   <p><%- escapeText(post.body) %></p>
+
+   <% if (session.user && session.user.id == post.authorId) {%>  
+     <a href="/posts/<%= post.id %>/edit"> Editar </a>
+   <% } %>
+
+
+
+</div>
+
+<hr />
+<%- include ../attachments/index.ejs %>
+<hr />
+<%- include ../comments/index.ejs %>
+<hr />
+
+
+<% if (session.user) { %>
+   <blockquote>
+      <%- include ../comments/new.ejs %> 
+   </blockquote>
+   <hr />
+<% } %>
+
+<a href="/posts"> Volver al índice de Posts</a>
